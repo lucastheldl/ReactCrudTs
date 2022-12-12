@@ -13,6 +13,10 @@ import TaskList from './components/TaskList';
 import { ITask } from './interfaces/Task';
 
 function App() {
+
+  const [taskList,setTasksList] = useState<ITask[]>([]);
+
+
   return (
     <div className="App">
       <Header/>
@@ -20,12 +24,12 @@ function App() {
       <main className={styles.main}>
         <div>
         <h2>Oque você vai fazer?</h2>
-      <TaskForm btnText='Criar tarefa'/>
+      <TaskForm btnText='Criar tarefa' taskList={taskList} setTaskList={setTasksList}/>
       </div>
 
       <div>
         <h2>Tarefas:</h2>
-        <TaskList/>
+        <TaskList taskList={taskList}/>
       </div></main>
       
       <Footer/>

@@ -7,17 +7,27 @@ import { ITask } from '../interfaces/Task';
 
 type Props = {
   btnText : string;
+  taskList : ITask[];
+  setTaskList?: React.Dispatch<React.SetStateAction<ITask[]>>
 }
 
-const TaskForm = ({btnText}: Props) => {
+const TaskForm = ({btnText,taskList,setTaskList}: Props) => {
 
-  //const [tasks,setTasks] = useState<ITask>([]);
 
-  const [id,setId] = useState<number>(0);
   const [title,setTitle] = useState<string>("");
   const [dificult,setDificult] = useState<number>(0);
 
-  const addTaskHandler = () => {
+  const addTaskHandler = (e:FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const id = Math.floor(Math.random() * 1000)
+
+    const newTask : ITask = { id, title, dificult,}
+    
+      setTaskList!([...taskList, newTask]);
+
+    setTitle("")
+    setDificult(0)
     
   }
   const changeHandler = (e:ChangeEvent<HTMLInputElement>) => {
@@ -34,12 +44,12 @@ const TaskForm = ({btnText}: Props) => {
     <form className={styles.form} onSubmit={addTaskHandler}>
       <div className={styles.input_container}>
         <label htmlFor="title">Título:</label>
-        <input type="text" placeholder='Escolha um título...' name='title' onChange={changeHandler}/>
+        <input type="text" placeholder='Escolha um título...' name='title' onChange={changeHandler} value={title}/>
       </div>
 
       <div className={styles.input_container}>
         <label htmlFor="dificult">Dificuldade:</label>
-        <input type="text" placeholder='Dificuldade da tarefa' name='dificult' onChange={changeHandler}/>
+        <input type="text" placeholder='Dificuldade da tarefa' name='dificult' onChange={changeHandler} value={dificult}/>
       </div>
       <input type="submit" value={btnText}/>
     </form>
