@@ -8,26 +8,46 @@ import { ITask } from '../interfaces/Task';
 type Props = {
   btnText : string;
   taskList : ITask[];
+  task?:ITask | null;
   setTaskList?: React.Dispatch<React.SetStateAction<ITask[]>>
+  handleUpdate?(id:number,title:string,dificult:number): void;
 }
 
-const TaskForm = ({btnText,taskList,setTaskList}: Props) => {
+const TaskForm = ({btnText,taskList,task,setTaskList,handleUpdate}: Props) => {
 
 
+  const [id,setId] = useState<number>(0);
   const [title,setTitle] = useState<string>("");
   const [dificult,setDificult] = useState<number>(0);
+
+
+  useEffect(() =>{
+    if(task){
+      setId(task.id);
+      setTitle(task.title);
+      setDificult(task.dificult);
+      
+    }
+
+  },[task])
 
   const addTaskHandler = (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const id = Math.floor(Math.random() * 1000)
+    if(handleUpdate){
+       handleUpdate(id,title,dificult)
+      
+    }else{
+      const id = Math.floor(Math.random() * 1000)
 
-    const newTask : ITask = { id, title, dificult,}
+      const newTask : ITask = { id, title, dificult,}
     
       setTaskList!([...taskList, newTask]);
 
-    setTitle("")
-    setDificult(0)
+      setTitle("")
+      setDificult(0)
+
+    }
     
   }
   const changeHandler = (e:ChangeEvent<HTMLInputElement>) => {
@@ -39,6 +59,7 @@ const TaskForm = ({btnText,taskList,setTaskList}: Props) => {
       setDificult(parseInt(e.target.value));
     }
   }
+  
 
   return (
     <form className={styles.form} onSubmit={addTaskHandler}>
